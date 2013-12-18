@@ -78,7 +78,7 @@ class Plugin:
     
     """
 
-    def __init__(self, description, version):
+    def __init__(self, description, version, verbose=False):
         """
         Initialize our Plugin's state.
 
@@ -91,6 +91,8 @@ class Plugin:
             basic usage. This explains the plugin itself.
         :param version: Sets the version of this plugin. Nagios **strongly**
             suggests this is available, so we require it.
+        :param verbose: Set state verbosity. If True print a lot of info, that I'm not sure somebody needs
+            (With all do respect to the initial author)
 
         """
         # PUBLIC
@@ -98,6 +100,7 @@ class Plugin:
         self.arguments = None
 
         # PRIVATE
+        self.__verbose = verbose
         self.__opt_parser = None   # OptionParser object.
         self.__perf = {}           # Collected performance data.
         self.__req_option = []     # Options considered required for operation.
@@ -125,6 +128,9 @@ class Plugin:
 
         self.__opt_parser.set_usage('%prog')
 
+    def __print(self, message):
+        if self.__verbose:
+            print message
 
     def __check_range(self, range_type, name):
         """
@@ -142,7 +148,7 @@ class Plugin:
         # Before we really do anything, make sure a warning or critical 
         # threshold were even set.
 
-        print 'range was ' + range_type
+        self.__print('range was ' + range_type)
 
         range_list = self.__warning
         if range_type == 'critical':
@@ -168,7 +174,7 @@ class Plugin:
         # The option parser should have already split these into proper
         # bottom, top, and match inversion, so long as the array element
         # is defined Perform our range test and set the exit status.
-        print range_list[threshold - 1]
+        self.__print(range_list[threshold - 1])
         (bottom, top, invert) = range_list[threshold - 1]
 
         if ((not invert and (val < bottom or val > top)) or
@@ -176,7 +182,7 @@ class Plugin:
             self.__exit_status = range_type
             self.__perf[name]['state'] = range_type
 
-        print "%s:%s:%s =  %s" % (val, bottom, top, ((val < bottom) or (val > top)))
+        self.__print("%s:%s:%s =  %s" % (val, bottom, top, (val < bottom or val > top)))
 
     def add_option(self, flag, name, helptext, **kwargs):
         """
@@ -445,11 +451,11 @@ class Plugin:
         # variable is set so we don't have to loop through all of them later.
 
         if len(self.__warning) > 0:
-            print "checking warning"
+            self.__print("checking warning")
             self.__check_range('warning', name)
 
         if len(self.__critical) > 0:
-            print "checking critical"
+            self.__print("checking critical")
             self.__check_range('critical', name)
 
         return self.__perf[name]['state']
@@ -548,7 +554,7 @@ class Plugin:
         sys.exit(3)
 
 
-def convert_range(option, opt_str, value, parser):
+def convert_range(option, value, parser):
     """
     Convert a warning/critical range into separate testable variables.
 
