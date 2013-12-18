@@ -349,9 +349,9 @@ class Plugin:
             self.unknown_error("Range number must be 1 or greater!")
 
         try:
-            my_range = self.__warning
+            my_range = self.__warning or []
             if range_type == 'critical':
-                my_range = self.__critical
+                my_range = self.__critical or []
 
             range_start = float(range_start)
             range_end = float(range_end)
