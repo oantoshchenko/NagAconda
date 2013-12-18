@@ -3,9 +3,8 @@ Test how the output matches what Nagios expects.
 """
 
 import sys
-from nose import with_setup
-from NagAconda import Plugin
 from test import PlugTest
+
 
 class TestOperation(PlugTest):
     """

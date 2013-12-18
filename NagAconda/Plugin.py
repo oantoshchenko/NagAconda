@@ -57,6 +57,7 @@ __all__ = ['Plugin']
 from optparse import OptionParser
 import sys
 
+
 class Plugin:
     """
     This is the primary control class for NagAconda.
@@ -111,15 +112,15 @@ class Plugin:
         # statement.
 
         self.__opt_parser = OptionParser(version=version,
-            description=description, conflict_handler="resolve")
+                                         description=description, conflict_handler="resolve")
 
         self.__opt_parser.add_option('-V', '--version', action='version',
-            help="show program's version number and exit"
+                                     help="show program's version number and exit"
         )
 
         self.__opt_parser.add_option('-v', '--verbose', action='count',
-            help="Get more verbose status output. "
-            "Can be specified up to three times"
+                                     help="Get more verbose status output. "
+                                          "Can be specified up to three times"
         )
 
         self.__opt_parser.set_usage('%prog')
@@ -162,16 +163,16 @@ class Plugin:
                 return
             raise UserWarning, (
                 "Please set part %s of the %s threshold!" % (
-                threshold, range_type))
+                    threshold, range_type))
 
         # The option parser should have already split these into proper
         # bottom, top, and match inversion, so long as the array element
         # is defined Perform our range test and set the exit status.
-        print range_list[threshold-1]
-        (bottom, top, invert) = range_list[threshold-1]
+        print range_list[threshold - 1]
+        (bottom, top, invert) = range_list[threshold - 1]
 
         if ((not invert and (val < bottom or val > top)) or
-           (invert and val >= bottom and val <= top)):
+                (invert and val >= bottom and val <= top)):
             self.__exit_status = range_type
             self.__perf[name]['state'] = range_type
 
@@ -195,8 +196,8 @@ class Plugin:
         :param default: What value to default if unset.
         """
         self.__opt_parser.add_option('-' + flag, '--' + name, help=helptext,
-            dest=name, type='string', action=kwargs.get('action'),
-            callback=kwargs.get('callback'), default=kwargs.get('default'))
+                                     dest=name, type='string', action=kwargs.get('action'),
+                                     callback=kwargs.get('callback'), default=kwargs.get('default'))
 
         opt_usage = "-%s %s" % (flag, name.upper())
 
@@ -251,8 +252,8 @@ class Plugin:
                 "Status_type can only be one of *warning* or *critical*!")
 
         self.add_option(status_type[0], status_type,
-            "Set the %s notification level." % status_type,
-            required=required, action='callback', callback=convert_range)
+                        "Set the %s notification level." % status_type,
+                        required=required, action='callback', callback=convert_range)
 
     def finish(self):
         """
@@ -282,7 +283,6 @@ class Plugin:
         perfs = []
 
         for (perf_name, perf_dict) in self.__perf.items():
-
             perfs.append('%s=%s%s;%s;%s;%s;%s' % (
                 perf_name, perf_dict['val'], perf_dict['scale'] or '',
                 self.options.ensure_value('raw_warning', ''),
@@ -302,7 +302,7 @@ class Plugin:
         sys.exit(exit_value)
 
     def set_range(self, range_type, range_end, range_start=0,
-                 range_num=1, invert=False):
+                  range_num=1, invert=False):
         """
         Manually set certain warning or critical exit statuses.
 
@@ -353,7 +353,7 @@ class Plugin:
             if range_num > len(my_range):
                 my_range.append((range_start, range_end, invert))
             else:
-                my_range[range_num-1] = (range_start, range_end, invert)
+                my_range[range_num - 1] = (range_start, range_end, invert)
 
             if range_type == 'warning':
                 self.__warning = my_range
@@ -413,7 +413,7 @@ class Plugin:
             self.unknown_error("Performance measures must be numeric!")
 
         val_dict = {'val': val, 'min': None, 'max': None, 'scale': None,
-            'threshold': 1, 'state': 'ok'}
+                    'threshold': 1, 'state': 'ok'}
 
         if kwargs.has_key('lowest'):
             val_dict['min'] = float(kwargs.get('lowest'))
@@ -510,7 +510,7 @@ class Plugin:
         for opt_name in self.__req_option:
             if not getattr(self.options, opt_name):
                 self.__opt_parser.error("Required option '%s' not set!" %
-                    opt_name)
+                                        opt_name)
 
         # Capture warning and critical thresholds if there were any.
         # These can be overridden by API calls.
@@ -547,6 +547,7 @@ class Plugin:
         print 'Status Unknown: ' + message
         sys.exit(3)
 
+
 def convert_range(option, opt_str, value, parser):
     """
     Convert a warning/critical range into separate testable variables.
@@ -572,6 +573,7 @@ def convert_range(option, opt_str, value, parser):
 
     for part in value.split(','):
         parser.values.ensure_value(option.dest, []).append(get_range(part))
+
 
 def get_range(value):
     """
@@ -627,6 +629,7 @@ def get_range(value):
         top = float(value)
 
     return (bottom, top, invert)
+
 
 if __name__ == "__main__":
     PLUGTEST = Plugin()

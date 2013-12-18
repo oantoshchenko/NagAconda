@@ -3,10 +3,8 @@ Test basic command-line handling of the Plugin class.
 """
 
 import sys
-from nose import with_setup
-from NagAconda import Plugin
 from test import PlugTest
-from optparse import OptionError
+
 
 class TestOptions(PlugTest):
     """
@@ -23,7 +21,7 @@ class TestOptions(PlugTest):
 
         """
         self.plugin.add_option("t", "test", "Test required parameter",
-            required=True)
+                               required=True)
 
         try:
             self.plugin.start()
@@ -39,7 +37,7 @@ class TestOptions(PlugTest):
 
         """
         self.plugin.add_option("t", "test", "Test required parameter",
-            required=True)
+                               required=True)
         sys.argv.extend(['-t', 'this.is.a.test'])
         self.plugin.start()
 

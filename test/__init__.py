@@ -7,13 +7,12 @@ NagAconda is at the moment.
 """
 
 import sys
-from nose import with_setup
 from NagAconda import Plugin
 
 __all__ = ['PlugTest']
 
-class PlugTest:
 
+class PlugTest:
     def __init__(self):
         self.plugin = None
 
