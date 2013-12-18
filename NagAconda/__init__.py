@@ -14,7 +14,7 @@ greatly simplify the process of actually generating Nagios output.
 
 """
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
 from Plugin import *
 

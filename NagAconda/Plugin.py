@@ -46,7 +46,7 @@ API Specification
 
 """
 
-__version__ = '0.2.1'
+__version__ = '0.3.0'
 __all__ = ['Plugin']
 
 # We need the option parser primarily to provide an instruction harness to the
